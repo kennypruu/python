@@ -1,0 +1,271 @@
+import keyboard
+
+def celsius_2_fahrenheit(celsius): return (celsius * 9/5) + 32
+def celsius_2_kelvin(celsius): return celsius + 273.15
+def fahrenheit_2_celsius(fahrenheit): return (fahrenheit - 32) * 5/9
+def fahrenheit_2_kelvin(fahrenheit): return (fahrenheit - 32) * 5 / 9 + 273.15
+def kelvin_2_celsius(kelvin): return kelvin - 273.15
+def kelvin_2_fahrenheit(kelvin): return (kelvin - 273.15) * 9 / 5 + 32
+
+print("Programa para la conversion de temperaturas entre Celsius (c), Fahrenheit (f) e Kelvin (k)")
+
+while True:
+    if keyboard.is_pressed('esc'):
+        print("Salida del programa")
+        break
+
+    temp_in = input("Ingresa la temperatura que quieres convertir con su unidad de medida\n(ejemplos: 25C, 77F, 300K): ").strip().replace(',', '.').replace("°", "")
+    
+    if not temp_in:
+        continue
+
+    try:
+        if temp_in[-1].upper() == 'C':
+            celsius = float(temp_in[:-1])
+            if -273.15 <= celsius <= 1000:
+                print(f"{celsius}°C = {celsius_2_fahrenheit(celsius):.2f}°F = {celsius_2_kelvin(celsius):.2f}K")
+                break
+            else:
+                print("Las temperaturas en Celsius tienen que ser entre -273.15°C y 1000°C")
+        
+        elif temp_in[-1].upper() == 'F':
+            fahrenheit = float(temp_in[:-1])
+            if -459.67 <= fahrenheit <= 1832:
+                print(f"{fahrenheit}°F = {fahrenheit_2_celsius(fahrenheit):.2f}°C = {fahrenheit_2_kelvin(fahrenheit):.2f}K")
+                break
+            else:
+                print("Las temperaturas en Fahrenheit tienen que ser entre -459.67°F y 1832°F")
+        
+        elif temp_in[-1].upper() == 'K':
+            kelvin = float(temp_in[:-1])
+            if 0 <= kelvin <= 1273.15:
+                print(f"{kelvin}K = {kelvin_2_celsius(kelvin):.2f}°C = {kelvin_2_fahrenheit(kelvin):.2f}°F")
+                break            
+            else:
+                print("Las temperaturas en Kelvin tienen que ser entre 0K y 1273.15K")
+        
+        else:
+            print("Unidad de medida no reconocida. Recuerda añadir C, F o K despues del valor de la temperatura")
+    
+    except ValueError:
+        print("Ingresa un valor numerico valido para la temperatura")
+
+
+***************************************************************************************************************************************************************************
+
+Ecco una spiegazione dettagliata di ogni parte del codice:
+
+---
+
+### 1. **Importazione della Libreria `keyboard`**
+
+```python
+import keyboard
+```
+
+**Spiegazione:**
+- Il comando `import` serve a caricare la libreria `keyboard`, che consente di rilevare l'input dei tasti della tastiera.
+- Con `keyboard`, il programma può verificare se l'utente ha premuto il tasto `Esc` per interrompere il ciclo, permettendo così di uscire dal programma.
+
+---
+
+### 2. **Definizione delle Funzioni di Conversione**
+
+Queste funzioni permettono di convertire una temperatura da una scala a un'altra. Ciascuna riceve un valore di temperatura in una determinata scala (Celsius, Fahrenheit o Kelvin) e restituisce il valore convertito.
+
+#### 2.1 Conversione da Celsius a Fahrenheit
+
+```python
+def celsius_2_fahrenheit(celsius): return (celsius * 9/5) + 32
+```
+
+**Spiegazione:**
+- La funzione `celsius_2_fahrenheit` prende un parametro chiamato `celsius`, che rappresenta una temperatura in gradi Celsius.
+- La formula `(celsius * 9/5) + 32` converte Celsius in Fahrenheit. Moltiplica `celsius` per 9/5 e aggiunge 32 per ottenere il valore in Fahrenheit.
+- `return` restituisce il risultato di questa operazione.
+
+---
+
+#### 2.2 Conversione da Celsius a Kelvin
+
+```python
+def celsius_2_kelvin(celsius): return celsius + 273.15
+```
+
+**Spiegazione:**
+- `celsius_2_kelvin` prende `celsius` come input e somma 273.15, convertendo Celsius in Kelvin.
+- Restituisce il risultato con `return`.
+
+---
+
+#### 2.3 Conversione da Fahrenheit a Celsius
+
+```python
+def fahrenheit_2_celsius(fahrenheit): return (fahrenheit - 32) * 5/9
+```
+
+**Spiegazione:**
+- `fahrenheit_2_celsius` riceve un valore `fahrenheit`.
+- La formula `(fahrenheit - 32) * 5/9` converte Fahrenheit in Celsius, sottraendo 32 e moltiplicando per 5/9.
+- Il risultato viene restituito con `return`.
+
+---
+
+#### 2.4 Conversione da Fahrenheit a Kelvin
+
+```python
+def fahrenheit_2_kelvin(fahrenheit): return (fahrenheit - 32) * 5 / 9 + 273.15
+```
+
+**Spiegazione:**
+- `fahrenheit_2_kelvin` prende `fahrenheit` e lo converte in Kelvin.
+- Usa la formula `(fahrenheit - 32) * 5 / 9 + 273.15`, che combina la conversione in Celsius seguita dall'aggiunta di 273.15 per ottenere Kelvin.
+- Restituisce il risultato.
+
+---
+
+#### 2.5 Conversione da Kelvin a Celsius
+
+```python
+def kelvin_2_celsius(kelvin): return kelvin - 273.15
+```
+
+**Spiegazione:**
+- `kelvin_2_celsius` prende `kelvin` come parametro e sottrae 273.15 per convertire da Kelvin a Celsius.
+- Restituisce il risultato.
+
+---
+
+#### 2.6 Conversione da Kelvin a Fahrenheit
+
+```python
+def kelvin_2_fahrenheit(kelvin): return (kelvin - 273.15) * 9 / 5 + 32
+```
+
+**Spiegazione:**
+- `kelvin_2_fahrenheit` riceve un valore in `kelvin`.
+- La formula `(kelvin - 273.15) * 9 / 5 + 32` converte Kelvin in Fahrenheit, sottraendo 273.15 (per ottenere Celsius), moltiplicando per 9/5 e aggiungendo 32.
+- Il risultato viene restituito.
+
+---
+
+### 3. **Messaggio di Introduzione**
+
+```python
+print("Programa para la conversion de temperaturas entre Celsius (c), Fahrenheit (f) e Kelvin (k)")
+```
+
+**Spiegazione:**
+- `print()` visualizza il messaggio introduttivo, spiegando lo scopo del programma: la conversione di temperature tra Celsius, Fahrenheit e Kelvin.
+- L'utente viene informato che può specificare la scala di temperatura aggiungendo una "C", "F" o "K" al valore.
+
+---
+
+### 4. **Inizio del Ciclo Infinito**
+
+```python
+while True:
+```
+
+**Spiegazione:**
+- `while True` crea un ciclo che si ripete all'infinito, a meno che non venga interrotto da un'istruzione `break`.
+- Questo ciclo consente all'utente di inserire continuamente valori fino a quando decide di uscire.
+
+---
+
+### 5. **Controllo del Tasto `Esc` per Uscire dal Programma**
+
+```python
+    if keyboard.is_pressed('esc'):
+        print("Salida del programa")
+        break
+```
+
+**Spiegazione:**
+- `if keyboard.is_pressed('esc')` verifica se l'utente ha premuto il tasto `Esc`.
+- Se `Esc` è premuto, `print("Salida del programa")` visualizza il messaggio di uscita, e `break` interrompe il ciclo `while`, terminando il programma.
+
+---
+
+### 6. **Richiesta di Input per la Temperatura**
+
+```python
+    temp_in = input("Ingresa la temperatura que quieres convertir con su unidad de medida\n(ejemplos: 25C, 77F, 300K): ").strip().replace(',', '.').replace("°", "")
+```
+
+**Spiegazione:**
+- `input()` chiede all'utente di inserire una temperatura con l'unità (C, F o K).
+- `.strip()` rimuove gli spazi bianchi iniziali e finali.
+- `.replace(',', '.')` sostituisce eventuali virgole con punti per evitare errori con i decimali.
+- `.replace("°", "")` rimuove il simbolo `°`, se presente, per uniformare l'input.
+
+---
+
+### 7. **Controllo di Input Vuoto**
+
+```python
+    if not temp_in:
+        continue
+```
+
+**Spiegazione:**
+- `if not temp_in` controlla se `temp_in` è vuoto (se l’utente non ha inserito nulla).
+- Se `temp_in` è vuoto, `continue` salta il resto del ciclo corrente e ricomincia dal prossimo ciclo `while`, chiedendo un nuovo input.
+
+---
+
+### 8. **Tentativo di Conversione con il Blocco `try`**
+
+```python
+    try:
+```
+
+**Spiegazione:**
+- `try` avvia un blocco che tenta di eseguire il codice successivo.
+- Se viene sollevato un errore (come l'inserimento di un valore non numerico), il programma salterà al blocco `except`.
+
+---
+
+### 9. **Conversione da Celsius**
+
+```python
+        if temp_in[-1].upper() == 'C':
+            celsius = float(temp_in[:-1])
+            if -273.15 <= celsius <= 1000:
+                print(f"{celsius}°C = {celsius_2_fahrenheit(celsius):.2f}°F = {celsius_2_kelvin(celsius):.2f}K")
+                break
+            else:
+                print("Las temperaturas en Celsius tienen que ser entre -273.15°C y 1000°C")
+```
+
+**Spiegazione:**
+- `if temp_in[-1].upper() == 'C'` verifica se l'ultima lettera dell'input è "C" (indipendentemente dal maiuscolo o minuscolo).
+- `celsius = float(temp_in[:-1])` converte il valore (senza l'ultima lettera) in un numero `float`.
+- `if -273.15 <= celsius <= 1000` verifica se `celsius` è in un intervallo realistico.
+- `print(...)` mostra le conversioni in Fahrenheit e Kelvin.
+- `break` termina il ciclo, quindi il programma si ferma dopo la conversione.
+
+---
+
+### 10. **Conversione da Fahrenheit**
+
+Funziona in modo simile alla conversione da Celsius.
+
+---
+
+### 11. **Conversione da Kelvin**
+
+Funziona in modo simile alle precedenti.
+
+---
+
+### 12. **Gestione degli Errori**
+
+```python
+    except ValueError:
+        print("Ingresa un valor numerico valido para la temperatura")
+```
+
+**Spiegazione:**
+- `except ValueError` cattura gli errori dovuti a input non validi (ad esempio, se l'utente ha inserito un testo al posto di un numero).
+- `print()` visualizza un messaggio per indicare di inserire un numero valido.
