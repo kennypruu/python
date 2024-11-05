@@ -1,0 +1,260 @@
+import pandas
+import sqlalchemy
+import keyboard
+import getpass
+
+def create_database_connection(user, password, host, database_name):
+    try:
+        engine = sqlalchemy.create_engine(f"mysql+pymysql://{user}:{password}@{host}/{database_name}")
+        connection = engine.connect()
+        print("\nConexión a la base de datos establecida con éxito.\n")
+        return engine, connection
+    except Exception as e:
+        print("\nError en la conexión a la base de datos:\n",e)
+        return None, None
+
+def get_table_names(engine):
+    inspector = sqlalchemy.inspect(engine)
+    table_names = inspector.get_table_names()
+    if table_names:
+        print("Tablas encontradas en la base de datos:", table_names)
+    else:
+        print(f"User: {user} \nContraseña: (correcta)\nHost: {host} \nDatabase: {database_name}")
+        print("\nNinguna tabla encontrada en la base de datos.\n\nSalida del programa")
+    return table_names
+
+def load_tables_into_dataframes(connection, table_names):
+    for table_name in table_names:
+        query = f"SELECT * FROM {table_name}"
+        globals()[f"df_{table_name}"] = pandas.read_sql(query, connection)
+    print("\nDatos cargados con éxito en DataFrame.")
+
+def display_dataframes(table_names):
+    print("\nContenido de las tablas:")
+    for table_name in table_names:
+        df_name = f"df_{table_name}"
+        df = globals()[df_name]
+        
+        print("\n**************************************\n**************************************")
+        print(f"Tabla: {table_name}")
+        print("\n**************************************\n**************************************")
+        print("\n***********Información general:***********\n")
+        print(df.info(), "\n")        
+        print("\n**********************Primeras 3 filas:**********************\n\n", df.head(3), "\n")
+        print("\n**********************Últimas 3 filas:**********************\n\n", df.tail(3), "\n")
+
+print("Programa para la conexión a una base de datos MySQL y la visualización de sus tablas en DataFrame utilizando la biblioteca Pandas.")
+print("Presiona 'Esc' para salir.")
+
+user = input("Introduce el nombre de usuario para la base de datos (ej: root)")
+if not keyboard.is_pressed('esc'):
+    password = getpass.getpass("Introduce la contraseña para la base de datos (ej:****)")
+if not keyboard.is_pressed('esc'):
+    host = input("Introduce el host de la base de datos (ej: localhost)")
+if not keyboard.is_pressed('esc'):
+    database_name = input("Introduce el nombre de la base de datos (ej: sprint_4_v2)")
+
+if not keyboard.is_pressed('esc'):
+    engine, connection = create_database_connection(user, password, host, database_name)
+    if connection:
+        table_names = get_table_names(engine)
+        if table_names:
+            load_tables_into_dataframes(connection, table_names)
+            display_dataframes(table_names)
+
+if keyboard.is_pressed('esc'):
+    print("Salida del programa")
+
+
+***************************************************************************************************************************************************************************
+
+
+Analizziamo questo codice in modo estremamente dettagliato, riga per riga. Questo script utilizza Python per connettersi a un database MySQL, caricare le tabelle in DataFrame di Pandas e visualizzare i contenuti delle tabelle.
+
+---
+
+### Importazione delle Librerie
+
+```python
+import pandas
+import sqlalchemy
+import keyboard
+import getpass
+```
+
+1. **`pandas`**: Libreria per la manipolazione di dati in strutture come DataFrame, che consente di gestire e analizzare dati tabulari.
+2. **`sqlalchemy`**: Libreria di gestione dei database, che consente di stabilire connessioni e interagire con database come MySQL.
+3. **`keyboard`**: Libreria per rilevare input dalla tastiera. Qui, è usata per rilevare se viene premuto il tasto `Esc` per uscire dallo script.
+4. **`getpass`**: Libreria per leggere la password senza mostrarla sullo schermo, proteggendo la privacy.
+
+---
+
+### Funzione `create_database_connection`
+
+```python
+def create_database_connection(user, password, host, database_name):
+```
+
+Questa funzione crea una connessione a un database MySQL, utilizzando l’utente, la password, il server (host) e il nome del database.
+
+#### Corpo della Funzione
+
+```python
+    try:
+        engine = sqlalchemy.create_engine(f"mysql+pymysql://{user}:{password}@{host}/{database_name}")
+        connection = engine.connect()
+        print("\nConexión a la base de datos establecida con éxito.\n")
+        return engine, connection
+    except Exception as e:
+        print("\nError en la conexión a la base de datos:\n", e)
+        return None, None
+```
+
+1. **Creazione di `engine`**: `sqlalchemy.create_engine(...)` costruisce un "motore" per la connessione al database. La stringa di connessione contiene i parametri per MySQL, come l’utente (`user`), la password (`password`), l’host (`host`), e il nome del database (`database_name`).
+2. **Connessione (`connection`)**: `engine.connect()` apre la connessione al database.
+3. **Stampa di Messaggi**: 
+   - Se la connessione ha successo, viene stampato un messaggio di conferma.
+   - Se si verifica un errore, la connessione non viene stabilita, l’errore viene stampato e la funzione restituisce `(None, None)`.
+
+---
+
+### Funzione `get_table_names`
+
+```python
+def get_table_names(engine):
+    inspector = sqlalchemy.inspect(engine)
+    table_names = inspector.get_table_names()
+```
+
+1. **`inspector`**: `sqlalchemy.inspect(engine)` crea un oggetto "ispettore" che fornisce accesso ai metadati del database.
+2. **`table_names`**: `inspector.get_table_names()` restituisce una lista con i nomi delle tabelle nel database.
+
+#### Messaggi di Stampa
+
+```python
+    if table_names:
+        print("Tablas encontradas en la base de datos:", table_names)
+    else:
+        print(f"User: {user} \nContraseña: (correcta)\nHost: {host} \nDatabase: {database_name}")
+        print("\nNinguna tabla encontrada en la base de datos.\n\nSalida del programa")
+```
+
+- Se sono presenti tabelle, il programma le stampa.
+- Se non ci sono tabelle, vengono stampati i parametri di connessione e un messaggio che segnala l’assenza di tabelle.
+
+---
+
+### Funzione `load_tables_into_dataframes`
+
+```python
+def load_tables_into_dataframes(connection, table_names):
+    for table_name in table_names:
+        query = f"SELECT * FROM {table_name}"
+        globals()[f"df_{table_name}"] = pandas.read_sql(query, connection)
+    print("\nDatos cargados con éxito en DataFrame.")
+```
+
+1. **Iterazione sulle Tabelle**: `for table_name in table_names:` itera su ogni nome di tabella.
+2. **Query SQL**: `query = f"SELECT * FROM {table_name}"` crea una query SQL che seleziona tutti i dati (`*`) dalla tabella corrente.
+3. **Caricamento in DataFrame**:
+   - `pandas.read_sql(query, connection)` esegue la query sul database e carica il risultato in un DataFrame Pandas.
+   - `globals()[f"df_{table_name}"] = ...` aggiunge il DataFrame in un oggetto globale, con un nome come `df_nome_tabella`, permettendo l’accesso a ogni DataFrame fuori dalla funzione.
+4. **Messaggio di Conferma**: Stampa un messaggio che indica il completamento del caricamento dei dati.
+
+---
+
+### Funzione `display_dataframes`
+
+```python
+def display_dataframes(table_names):
+```
+
+Questa funzione visualizza informazioni dettagliate per ogni tabella caricata.
+
+#### Corpo della Funzione
+
+```python
+    print("\nContenido de las tablas:")
+    for table_name in table_names:
+        df_name = f"df_{table_name}"
+        df = globals()[df_name]
+```
+
+1. **`df_name`**: Assegna un nome come `df_nome_tabella` alla tabella corrente.
+2. **`df`**: Ottiene il DataFrame associato a `df_name` dall'ambito globale.
+
+#### Visualizzazione dei Dettagli della Tabella
+
+```python
+        print("\n**************************************\n**************************************")
+        print(f"Tabla: {table_name}")
+        print("\n**************************************\n**************************************")
+        print("\n***********Información general:***********\n")
+        print(df.info(), "\n")        
+        print("\n**********************Primeras 3 filas:**********************\n\n", df.head(3), "\n")
+        print("\n**********************Últimas 3 filas:**********************\n\n", df.tail(3), "\n")
+```
+
+1. **`df.info()`**: Visualizza informazioni sul DataFrame, come colonne, tipi di dati e valori nulli.
+2. **`df.head(3)` e `df.tail(3)`**: Visualizzano le prime e le ultime 3 righe del DataFrame per fornire un'anteprima dei dati.
+
+---
+
+### Funzionamento del Programma Principale
+
+```python
+print("Programa para la conexión a una base de datos MySQL y la visualización de sus tablas en DataFrame utilizando la biblioteca Pandas.")
+print("Presiona 'Esc' para salir.")
+```
+
+1. Stampa una descrizione del programma e istruzioni per uscire premendo `Esc`.
+
+---
+
+### Inserimento delle Credenziali
+
+```python
+user = input("Introduce el nombre de usuario para la base de datos (ej: root)")
+if not keyboard.is_pressed('esc'):
+    password = getpass.getpass("Introduce la contraseña para la base de datos (ej:****)")
+if not keyboard.is_pressed('esc'):
+    host = input("Introduce el host de la base de datos (ej: localhost)")
+if not keyboard.is_pressed('esc'):
+    database_name = input("Introduce el nombre de la base de datos (ej: sprint_4_v2)")
+```
+
+1. **Richiesta dei Dati di Connessione**: L’utente inserisce il nome utente, la password, l’host e il nome del database.
+2. **Controllo di Uscita (`Esc`)**: Ogni input verifica se `Esc` è premuto, permettendo all'utente di uscire.
+
+---
+
+### Connessione e Visualizzazione delle Tabelle
+
+```python
+if not keyboard.is_pressed('esc'):
+    engine, connection = create_database_connection(user, password, host, database_name)
+    if connection:
+        table_names = get_table_names(engine)
+        if table_names:
+            load_tables_into_dataframes(connection, table_names)
+            display_dataframes(table_names)
+```
+
+1. **Connessione al Database**: Chiama `create_database_connection(...)` e verifica che la connessione sia stabilita.
+2. **Recupero dei Nomi delle Tabelle**: Chiama `get_table_names(engine)` per ottenere la lista delle tabelle.
+3. **Caricamento e Visualizzazione dei Dati**: Se ci sono tabelle, chiama le funzioni `load_tables_into_dataframes` e `display_dataframes` per caricare e visualizzare i dati.
+
+---
+
+### Uscita dal Programma
+
+```python
+if keyboard.is_pressed('esc'):
+    print("Salida del programa")
+```
+
+1. **Messaggio di Uscita**: Se `Esc` è premuto, viene stampato un messaggio di uscita.
+
+---
+
+Questo script, in sintesi, offre un modo per connettersi a un database MySQL, caricare le tabelle in Pandas e visualizzare un riepilogo dei dati.
