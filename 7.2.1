@@ -1,0 +1,240 @@
+def diccionario_inverso(diccionario_original):
+    diccionario_inv = {}
+    duplicates = {}
+
+    for key, value in diccionario_original.items():
+        if value in diccionario_inv:
+            if not isinstance(diccionario_inv[value], list):
+                diccionario_inv[value] = [diccionario_inv[value]]
+            diccionario_inv[value].append(key)
+            duplicates[value] = diccionario_inv[value]
+        else:
+            diccionario_inv[value] = key
+
+    return diccionario_inv, duplicates
+
+diccionario_original1 = {'a': 1, 'b': 2, 'c': 3}
+diccionario_original2 = {'x': 'apple', 'y': 'banana', 'z': 'banana'}
+
+print(f"\n******************************************************************\nDiccionario original 1:\n{diccionario_original1}")
+dic_inv1, duplicados1 = diccionario_inverso(diccionario_original1)
+if duplicados1:
+    print(f"\Diccionario con duplicados transformado en lista:\n{dic_inv1}\n\nValores duplicados encontrados: {duplicados1}\n")
+else:
+    print(f"\nDiccionario invertido, no habian duplicados:\n{dic_inv1}\n")
+
+print(f"\n******************************************************************\nDiccionario original 2:\n{diccionario_original2}")
+dic_inv2, duplicados2 = diccionario_inverso(diccionario_original2)
+if duplicados2:
+    print(f"\nDiccionario con duplicados transformado en lista:\n{dic_inv2}\n\nValores duplicados encontrados: {duplicados2}\n")
+else:
+    print(f"\nDiccionario invertido, no habian duplicados:\n{dic_inv2}\n")
+
+
+
+***************************************************************************************************************************************************************************
+
+
+
+Vediamo una spiegazione dettagliata di questo codice.
+
+---
+
+### Definizione della Funzione `diccionario_inverso`
+
+```python
+def diccionario_inverso(diccionario_original):
+```
+
+**Spiegazione:**
+- La funzione `diccionario_inverso` prende un dizionario chiamato `diccionario_original` come parametro. Questo dizionario contiene coppie di chiavi e valori che vogliamo "invertire", cioè scambiare di posizione.
+
+---
+
+### Creazione dei Dizionari `diccionario_inv` e `duplicates`
+
+```python
+    diccionario_inv = {}
+    duplicates = {}
+```
+
+**Spiegazione:**
+- `diccionario_inv` è un dizionario vuoto in cui memorizzeremo l'inversione di `diccionario_original`.
+- `duplicates` è un altro dizionario vuoto in cui raccoglieremo i valori duplicati, cioè quelli che sono associati a più chiavi nel dizionario originale.
+
+---
+
+### Ciclo `for` per Iterare Attraverso il Dizionario Originale
+
+```python
+    for key, value in diccionario_original.items():
+```
+
+**Spiegazione:**
+- Con `for`, iteriamo su ogni coppia chiave-valore di `diccionario_original`.
+- `.items()` restituisce ciascuna coppia (chiave, valore) sotto forma di una tupla.
+- `key` rappresenta ogni chiave del dizionario originale.
+- `value` è il valore associato a quella chiave.
+
+---
+
+### Verifica dei Duplicati nel Dizionario Inverso
+
+```python
+        if value in diccionario_inv:
+```
+
+**Spiegazione:**
+- `if value in diccionario_inv` verifica se il valore `value` è già presente come chiave in `diccionario_inv`.
+- Se il valore è già presente, significa che è duplicato, poiché in `diccionario_original` ci sono più chiavi con lo stesso valore.
+
+---
+
+#### Conversione del Valore in Lista se Duplicato
+
+```python
+            if not isinstance(diccionario_inv[value], list):
+                diccionario_inv[value] = [diccionario_inv[value]]
+```
+
+**Spiegazione:**
+- `if not isinstance(diccionario_inv[value], list):` verifica se l'elemento associato a `value` in `diccionario_inv` non è già una lista.
+- `isinstance()` è una funzione che verifica se un oggetto è di un certo tipo (in questo caso, `list`).
+- Se l'elemento non è una lista:
+  - `diccionario_inv[value] = [diccionario_inv[value]]` trasforma il valore esistente in una lista. Questo passaggio è necessario per poter aggiungere altre chiavi alla lista, poiché ci sono più chiavi con lo stesso valore in `diccionario_original`.
+
+---
+
+#### Aggiunta di Chiavi Duplicate alla Lista e Aggiornamento di `duplicates`
+
+```python
+            diccionario_inv[value].append(key)
+            duplicates[value] = diccionario_inv[value]
+```
+
+**Spiegazione:**
+- `diccionario_inv[value].append(key)` aggiunge la nuova chiave alla lista di chiavi duplicate per quel valore.
+- `duplicates[value] = diccionario_inv[value]` aggiunge questa lista di chiavi a `duplicates`, in modo da poter registrare i valori duplicati.
+
+---
+
+#### Inserimento del Valore nel Dizionario Inverso se Non Duplicato
+
+```python
+        else:
+            diccionario_inv[value] = key
+```
+
+**Spiegazione:**
+- `else` gestisce il caso in cui `value` non è ancora presente come chiave in `diccionario_inv`.
+- `diccionario_inv[value] = key` assegna `key` come valore per la chiave `value` in `diccionario_inv`, poiché non ci sono duplicati.
+
+---
+
+### Restituzione del Dizionario Inverso e dei Duplicati
+
+```python
+    return diccionario_inv, duplicates
+```
+
+**Spiegazione:**
+- `return diccionario_inv, duplicates` restituisce due dizionari:
+  - `diccionario_inv`, il dizionario invertito risultante.
+  - `duplicates`, che contiene i valori duplicati con le relative chiavi.
+
+---
+
+### Creazione di `diccionario_original1` e `diccionario_original2`
+
+```python
+diccionario_original1 = {'a': 1, 'b': 2, 'c': 3}
+diccionario_original2 = {'x': 'apple', 'y': 'banana', 'z': 'banana'}
+```
+
+**Spiegazione:**
+- `diccionario_original1` è un dizionario senza duplicati, in cui ogni lettera è associata a un numero unico.
+- `diccionario_original2` è un dizionario con duplicati: `'banana'` è associato sia alla chiave `'y'` che alla chiave `'z'`.
+
+---
+
+### Stampa del Dizionario Originale 1
+
+```python
+print(f"\n******************************************************************\nDiccionario original 1:\n{diccionario_original1}")
+```
+
+**Spiegazione:**
+- `print()` visualizza `diccionario_original1`, preceduto da una linea di separazione.
+- Il `f-string` inserisce il contenuto di `diccionario_original1` nel testo.
+
+---
+
+### Inversione di `diccionario_original1`
+
+```python
+dic_inv1, duplicados1 = diccionario_inverso(diccionario_original1)
+```
+
+**Spiegazione:**
+- `diccionario_inverso(diccionario_original1)` chiama la funzione per invertire `diccionario_original1`.
+- `dic_inv1` riceve il dizionario invertito.
+- `duplicados1` riceve eventuali duplicati (sarà vuoto, poiché non ci sono duplicati in `diccionario_original1`).
+
+---
+
+### Verifica e Stampa dei Duplicati per `diccionario_original1`
+
+```python
+if duplicados1:
+    print(f"\Diccionario con duplicados transformado en lista:\n{dic_inv1}\n\nValores duplicados encontrados: {duplicados1}\n")
+else:
+    print(f"\nDiccionario invertido, no habian duplicados:\n{dic_inv1}\n")
+```
+
+**Spiegazione:**
+- `if duplicados1:` verifica se ci sono duplicati in `duplicados1`.
+- Se ci sono duplicati:
+  - `print()` visualizza un messaggio che mostra `dic_inv1` e i duplicati trovati.
+- `else` gestisce il caso in cui non ci sono duplicati:
+  - `print()` mostra `dic_inv1` confermando che non ci sono duplicati.
+
+---
+
+### Stampa del Dizionario Originale 2
+
+```python
+print(f"\n******************************************************************\nDiccionario original 2:\n{diccionario_original2}")
+```
+
+**Spiegazione:**
+- `print()` visualizza `diccionario_original2` con una linea di separazione.
+
+---
+
+### Inversione di `diccionario_original2`
+
+```python
+dic_inv2, duplicados2 = diccionario_inverso(diccionario_original2)
+```
+
+**Spiegazione:**
+- `diccionario_inverso(diccionario_original2)` chiama la funzione per invertire `diccionario_original2`.
+- `dic_inv2` riceve il dizionario invertito.
+- `duplicados2` riceve i duplicati trovati (in questo caso, conterrà `'banana'`).
+
+---
+
+### Verifica e Stampa dei Duplicati per `diccionario_original2`
+
+```python
+if duplicados2:
+    print(f"\nDiccionario con duplicados transformado en lista:\n{dic_inv2}\n\nValores duplicados encontrados: {duplicados2}\n")
+else:
+    print(f"\nDiccionario invertido, no habian duplicados:\n{dic_inv2}\n")
+```
+
+**Spiegazione:**
+- `if duplicados2:` verifica se ci sono duplicati in `duplicados2`.
+- Se ci sono duplicati:
+  - `print()` mostra `dic_inv2` e i duplicati trovati.
+- `else` gestisce il caso in cui non ci sono duplicati, confermando l'inversione completa.
