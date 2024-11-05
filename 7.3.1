@@ -1,0 +1,202 @@
+def cuenta_palabras(file):
+    frecuencia = {}
+
+    try:
+        with open(file, 'r', encoding='utf-8') as file:
+            # Rimuove la punteggiatura e converte il testo in minuscolo
+            palabras = file.read().lower().translate(str.maketrans('', '', ',.!?;:()¡'))
+
+            palabras = palabras.split()
+
+            for word in palabras:
+                if word in frecuencia:
+                    frecuencia[word] += 1
+                else:
+                    frecuencia[word] = 1
+
+        diccionario_ordenado = {}
+        for word in sorted(frecuencia.keys()):
+            primeraletra = word[0]
+            if primeraletra not in diccionario_ordenado:
+                diccionario_ordenado[primeraletra] = {}
+            diccionario_ordenado[primeraletra][word] = frecuencia[word]
+
+        for letra, palabras in diccionario_ordenado.items():
+            print(f"\nPalabras con '{letra}':")
+            for palabra, count in palabras.items():
+                print(f"{palabra}: {count}")
+
+    except FileNotFoundError:
+        print("File no encontrado")
+
+file = 'tu_me_quieres_blanca.txt' 
+cuenta_palabras(file)
+
+
+***************************************************************************************************************************************************************************
+
+
+
+Esaminiamo in dettaglio questo codice Python, che ha l'obiettivo di contare le parole presenti in un file di testo, ignorando la punteggiatura, e di ordinarle in base alla lettera iniziale.
+
+---
+
+### Definizione della Funzione `cuenta_palabras`
+
+```python
+def cuenta_palabras(file):
+```
+
+**Spiegazione:**
+- La funzione `cuenta_palabras` accetta un argomento `file`, che rappresenta il nome di un file di testo.
+- Lo scopo della funzione è leggere il file, contare la frequenza di ciascuna parola e poi organizzare il risultato per la lettera iniziale di ogni parola.
+
+---
+
+### Creazione del Dizionario `frecuencia`
+
+```python
+    frecuencia = {}
+```
+
+**Spiegazione:**
+- `frecuencia` è un dizionario vuoto che verrà utilizzato per memorizzare il conteggio delle occorrenze di ogni parola.
+- Le chiavi del dizionario saranno le parole trovate nel testo, e i valori saranno i rispettivi conteggi.
+
+---
+
+### Apertura e Lettura del File
+
+```python
+    try:
+        with open(file, 'r', encoding='utf-8') as file:
+```
+
+**Spiegazione:**
+- Con il blocco `try`, il programma tenta di aprire il file con `open(file, 'r', encoding='utf-8')` per la lettura (`'r'`) con codifica `utf-8`, che gestisce correttamente i caratteri speciali.
+- `with open(...) as file:` garantisce che il file venga chiuso automaticamente una volta terminata la lettura, anche se si verifica un errore durante l'operazione.
+
+---
+
+### Rimozione della Punteggiatura e Conversione in Minuscolo
+
+```python
+            palabras = file.read().lower().translate(str.maketrans('', '', ',.!?;:()¡'))
+```
+
+**Spiegazione:**
+- `file.read()` legge tutto il contenuto del file come una singola stringa.
+- `.lower()` converte la stringa in minuscolo, per evitare di contare parole come "Casa" e "casa" come due parole diverse.
+- `.translate(str.maketrans('', '', ',.!?;:()¡'))` rimuove specifici segni di punteggiatura: `, . ! ? ; : ( ) ¡`.
+  - `str.maketrans('', '', ',.!?;:()¡')` crea una tabella di traduzione che mappa ciascun carattere di punteggiatura su `None`, indicandone così la rimozione.
+
+---
+
+### Suddivisione della Stringa in Parole
+
+```python
+            palabras = palabras.split()
+```
+
+**Spiegazione:**
+- `.split()` divide la stringa su ogni spazio, trasformandola in una lista di singole parole, `palabras`.
+
+---
+
+### Conteggio delle Parole
+
+```python
+            for word in palabras:
+                if word in frecuencia:
+                    frecuencia[word] += 1
+                else:
+                    frecuencia[word] = 1
+```
+
+**Spiegazione:**
+- Il ciclo `for word in palabras:` itera su ogni parola nella lista `palabras`.
+- `if word in frecuencia:` verifica se `word` è già una chiave in `frecuencia`.
+  - Se `word` è già presente, il programma incrementa il suo conteggio di 1.
+  - Altrimenti, aggiunge `word` a `frecuencia` con un conteggio iniziale di 1.
+
+---
+
+### Ordinamento delle Parole per Lettera Iniziale
+
+```python
+        diccionario_ordenado = {}
+        for word in sorted(frecuencia.keys()):
+            primeraletra = word[0]
+            if primeraletra not in diccionario_ordenado:
+                diccionario_ordenado[primeraletra] = {}
+            diccionario_ordenado[primeraletra][word] = frecuencia[word]
+```
+
+**Spiegazione:**
+- `diccionario_ordenado` è un dizionario vuoto che memorizzerà le parole in base alla loro lettera iniziale.
+- `for word in sorted(frecuencia.keys()):` scorre le parole ordinate alfabeticamente (le chiavi del dizionario `frecuencia`).
+- `primeraletra = word[0]` estrae la prima lettera di `word`.
+- `if primeraletra not in diccionario_ordenado:` verifica se questa lettera è già una chiave in `diccionario_ordenado`:
+  - Se non è presente, viene aggiunta come chiave, e il suo valore è un nuovo dizionario vuoto.
+- `diccionario_ordenado[primeraletra][word] = frecuencia[word]` aggiunge la parola `word` sotto la chiave corrispondente alla sua prima lettera, associando a questa parola il conteggio presente in `frecuencia`.
+
+---
+
+### Stampa delle Parole per Lettera Iniziale
+
+```python
+        for letra, palabras in diccionario_ordenado.items():
+            print(f"\nPalabras con '{letra}':")
+            for palabra, count in palabras.items():
+                print(f"{palabra}: {count}")
+```
+
+**Spiegazione:**
+- `for letra, palabras in diccionario_ordenado.items():` itera su ciascuna lettera e sulle parole corrispondenti contenute in `diccionario_ordenado`.
+- `print(f"\nPalabras con '{letra}':")` stampa la lettera iniziale e introduce la lista delle parole che iniziano con quella lettera.
+- `for palabra, count in palabras.items():` itera sulle parole associate a ciascuna lettera.
+  - `print(f"{palabra}: {count}")` stampa ogni parola e il suo conteggio.
+
+---
+
+### Gestione dell'Errore `FileNotFoundError`
+
+```python
+    except FileNotFoundError:
+        print("File no encontrado")
+```
+
+**Spiegazione:**
+- Se il file specificato non esiste, viene generata un'eccezione `FileNotFoundError`.
+- `except FileNotFoundError:` cattura questa eccezione e stampa il messaggio "File no encontrado".
+
+---
+
+### Esempio di Utilizzo
+
+```python
+file = 'tu_me_quieres_blanca.txt' 
+cuenta_palabras(file)
+```
+
+**Spiegazione:**
+- Assegniamo alla variabile `file` il nome `'tu_me_quieres_blanca.txt'`, che dovrebbe essere il file da analizzare.
+- `cuenta_palabras(file)` richiama la funzione, che tenterà di aprire, leggere e analizzare il file.
+
+---
+
+### Esempio di Output Atteso
+
+Per un file contenente il testo "Casa casa, casa! Sol casa sol":
+
+```
+Palabras con 'c':
+casa: 4
+
+Palabras con 's':
+sol: 2
+```
+
+**Spiegazione dell'Output:**
+- La parola `casa` appare 4 volte, mentre `sol` appare 2 volte.
+- L’output è organizzato in base alla lettera iniziale.
