@@ -1,0 +1,208 @@
+def separa_numeros(lista):
+   
+    lista_de_convertibles = []
+
+    lista_de_no_convertibles = []
+
+    def procesa_elemento(elemento):
+
+        if isinstance(elemento, (tuple, list)):
+            
+            for sub_item in elemento:
+                procesa_elemento(sub_item)
+
+        else:
+            try:
+                lista_de_convertibles.append(float(elemento))
+
+            except (ValueError, TypeError):
+                lista_de_no_convertibles.append(elemento)
+   
+    for item in lista:
+        procesa_elemento(item)
+    
+    return lista_de_convertibles, lista_de_no_convertibles
+
+lista_prueba = ['1.3', 'one', '1e10', 'seven', '3-1/2', ('2', 1, 1.4, 'not-a-number'), [1, 2, '3', '3.4']]
+
+lista_convertibles, lista_no_convertibles = separa_numeros(lista_prueba)
+
+print(f"Elementos convertibles: \n{lista_convertibles}\nElementos no convertibles: \n{lista_no_convertibles}\n")
+
+
+***************************************************************************************************************************************************************************
+
+Esaminiamo questo codice con una spiegazione dettagliata di ogni sua parte.
+
+---
+
+### Definizione della Funzione `separa_numeros`
+
+```python
+def separa_numeros(lista):
+```
+
+**Spiegazione:**
+- La funzione `separa_numeros` prende come parametro `lista`, che è una lista di elementi di tipo variabile (stringhe, numeri, tuple, ecc.). Questa funzione ha l'obiettivo di separare gli elementi convertibili in numeri (float) da quelli che non lo sono.
+
+---
+
+### Creazione delle Liste Vuote `lista_de_convertibles` e `lista_de_no_convertibles`
+
+```python
+    lista_de_convertibles = []
+    lista_de_no_convertibles = []
+```
+
+**Spiegazione:**
+- `lista_de_convertibles` è una lista vuota che raccoglierà tutti gli elementi convertibili in numeri (float).
+- `lista_de_no_convertibles` è una lista vuota per gli elementi che non possono essere convertiti in float (es., parole come "one", "seven").
+
+---
+
+### Definizione della Funzione Interna `procesa_elemento`
+
+```python
+    def procesa_elemento(elemento):
+```
+
+**Spiegazione:**
+- All'interno di `separa_numeros`, definiamo la funzione `procesa_elemento`, che si occuperà di verificare se un singolo `elemento` può essere convertito in float e, se sì, lo aggiunge a `lista_de_convertibles`. Se non è convertibile, lo aggiunge a `lista_de_no_convertibles`.
+
+---
+
+### Gestione degli Elementi `tuple` o `list`
+
+```python
+        if isinstance(elemento, (tuple, list)):
+```
+
+**Spiegazione:**
+- `isinstance(elemento, (tuple, list))` controlla se `elemento` è una tupla o una lista.
+- Questo controllo è necessario perché le tuple o le liste possono contenere altri elementi, quindi dobbiamo esplorare anche questi.
+
+---
+
+#### Ciclo `for` per Iterare su Elementi Interni di Tuple o Liste
+
+```python
+            for sub_item in elemento:
+                procesa_elemento(sub_item)
+```
+
+**Spiegazione:**
+- `for sub_item in elemento:` itera su ogni elemento (sub_item) all'interno di `elemento` se quest’ultimo è una lista o una tupla.
+- Per ogni `sub_item`, la funzione `procesa_elemento` viene richiamata ricorsivamente.
+  - Questo processo ricorsivo consente di gestire liste o tuple nidificate, analizzando ogni sottocomponente, indipendentemente dal livello di annidamento.
+
+---
+
+### Gestione degli Elementi Convertibili in Numeri (Float)
+
+```python
+        else:
+            try:
+                lista_de_convertibles.append(float(elemento))
+```
+
+**Spiegazione:**
+- L’`else` viene eseguito se `elemento` non è né una lista né una tupla.
+- `try` tenta di convertire `elemento` in un numero in virgola mobile (float) usando `float(elemento)`.
+  - Se l'operazione ha successo (quindi `elemento` è convertibile), il valore convertito viene aggiunto a `lista_de_convertibles`.
+
+---
+
+#### Gestione degli Elementi Non Convertibili in Numeri
+
+```python
+            except (ValueError, TypeError):
+                lista_de_no_convertibles.append(elemento)
+```
+
+**Spiegazione:**
+- `except (ValueError, TypeError):` cattura due tipi di errori:
+  - `ValueError`: se `elemento` è una stringa non numerica (ad es. "one"), Python non può convertirla in float e lancia un `ValueError`.
+  - `TypeError`: se `elemento` è di un tipo che non può essere convertito in float (es., `None`).
+- Quando uno di questi errori si verifica, `elemento` viene aggiunto a `lista_de_no_convertibles`.
+
+---
+
+### Ciclo Principale per Processare ogni Elemento della Lista Originale
+
+```python
+    for item in lista:
+        procesa_elemento(item)
+```
+
+**Spiegazione:**
+- `for item in lista:` itera su ciascun elemento di `lista`.
+- `procesa_elemento(item)` richiama la funzione `procesa_elemento` su ogni elemento.
+- Ogni `item` verrà quindi esaminato dalla funzione interna `procesa_elemento`, che determina se è convertibile o no.
+
+---
+
+### Restituzione delle Liste `lista_de_convertibles` e `lista_de_no_convertibles`
+
+```python
+    return lista_de_convertibles, lista_de_no_convertibles
+```
+
+**Spiegazione:**
+- `return lista_de_convertibles, lista_de_no_convertibles` restituisce due liste:
+  - `lista_de_convertibles`: contiene tutti gli elementi convertiti in float.
+  - `lista_de_no_convertibles`: contiene tutti gli elementi che non possono essere convertiti in float.
+
+---
+
+### Esempio di Utilizzo
+
+```python
+lista_prueba = ['1.3', 'one', '1e10', 'seven', '3-1/2', ('2', 1, 1.4, 'not-a-number'), [1, 2, '3', '3.4']]
+```
+
+**Spiegazione:**
+- `lista_prueba` è una lista di esempio con vari tipi di elementi:
+  - Ci sono numeri in forma di stringa ("1.3"), parole ("one", "seven"), numeri in notazione scientifica ("1e10"), stringhe non numeriche ("not-a-number").
+  - Ci sono anche tuple e liste che contengono elementi misti (numeri e stringhe).
+
+---
+
+### Chiamata alla Funzione e Assegnazione del Risultato
+
+```python
+lista_convertibles, lista_no_convertibles = separa_numeros(lista_prueba)
+```
+
+**Spiegazione:**
+- `separa_numeros(lista_prueba)` richiama la funzione con `lista_prueba` come input.
+- `lista_convertibles` e `lista_no_convertibles` ricevono le due liste restituite dalla funzione.
+
+---
+
+### Stampa dei Risultati
+
+```python
+print(f"Elementos convertibles: \n{lista_convertibles}\nElementos no convertibles: \n{lista_no_convertibles}\n")
+```
+
+**Spiegazione:**
+- `print()` visualizza il contenuto di `lista_convertibles` e `lista_no_convertibles`, che rispettivamente mostrano gli elementi convertiti e quelli non convertibili.
+- Il risultato mostra chiaramente quali elementi della lista sono stati riconosciuti come numeri e quali no.
+
+---
+
+### Esempio di Output Atteso
+
+Per `lista_prueba`, l'output atteso potrebbe essere simile a:
+
+```
+Elementos convertibles: 
+[1.3, 10000000000.0, 2.0, 1.0, 1.4, 1.0, 2.0, 3.0, 3.4]
+
+Elementos no convertibles: 
+['one', 'seven', '3-1/2', 'not-a-number']
+```
+
+**Spiegazione dell'Output:**
+- `Elementos convertibles` mostra tutti gli elementi che possono essere interpretati come numeri.
+- `Elementos no convertibles` elenca quelli che non possono essere convertiti in numeri.
