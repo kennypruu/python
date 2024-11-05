@@ -1,0 +1,237 @@
+import keyboard
+
+def calc_imc(peso, altura):
+    imc = peso / (altura ** 2)
+    if imc < 18.5: cat = "Bajo Peso"
+    elif 18.5 <= imc < 25: cat = "Peso Normal"
+    elif 25 <= imc < 30: cat = "Sobrepeso"
+    else: cat = "Obesidad"
+    return imc, cat
+
+print("Programa para el calculo del Índice de masa corporal")
+while True:
+    if keyboard.is_pressed('esc'):
+        print("Salida del programa")
+        break
+
+    peso = input("Ingresa el peso en 'Kg' o presiona ESC para salir").replace(",", ".")
+    try:
+        peso = float(peso)  
+        if 29.9 <= peso <= 250.1: break
+        else:
+            print(f"El valor ingresado es {peso} kg\nLa masa corporal se certifica solo para valores de peso entre 30 kg y 250 kg\nIngresa otra vez el peso")
+    except ValueError:
+        if not keyboard.is_pressed('esc'):
+            print(f"El valor ingresado no es valido: {peso}\nIngresa otra vez el peso")
+
+if not keyboard.is_pressed('esc'):
+    while True:
+        if keyboard.is_pressed('esc'):
+            print("Salida del programa")
+            break
+
+        altura = input("Ingresa la altura en 'm' o presiona ESC para salir").replace(",", ".")
+        try:
+            altura = float(altura)
+            if 0.9 <= altura <= 2.6: break
+            else:
+                print(f"El valor ingresado es {altura} m\nLa masa corporal se certifica solo para valores de altura entre 1 m y 2.5 m\nIngresa otra vez la altura")
+        except ValueError:
+            if not keyboard.is_pressed('esc'):
+                print(f"El valor ingresado no es valido: {altura}\nIngresa otra vez la altura")
+
+if not keyboard.is_pressed('esc'):
+    res_imc, res_cat = calc_imc(peso, altura)
+    print(f"Datos de peso y altura recibidos: {peso} Kg, {altura} m\nIMC = {res_imc:.2f}\nCategoria = {res_cat}")
+
+
+
+
+***************************************************************************************************************************************************************************
+---
+
+### 1. **Importazione della Libreria `keyboard`**
+
+```python
+import keyboard
+```
+
+**Spiegazione:**
+- Il comando `import` serve per caricare una libreria esterna (in questo caso, `keyboard`) che contiene funzionalità aggiuntive per lavorare con la tastiera. 
+- `keyboard` è una libreria Python che permette al programma di rilevare quando viene premuto un tasto specifico sulla tastiera. Nel nostro codice, questa libreria ci consente di monitorare se l'utente preme il tasto `Esc`, così possiamo interrompere il programma se l'utente vuole uscire.
+
+**Esempio pratico:** 
+- Dopo aver importato `keyboard`, possiamo usare comandi come `keyboard.is_pressed('esc')`, che restituisce `True` se il tasto `Esc` è premuto, `False` altrimenti.
+
+---
+
+### 2. **Definizione della Funzione `calc_imc`**
+
+```python
+def calc_imc(peso, altura):
+```
+
+**Spiegazione:**
+- `def` è una parola chiave in Python che serve per definire una funzione. Una funzione è un blocco di codice riutilizzabile che esegue una serie di istruzioni.
+- `calc_imc` è il nome della funzione. In questo caso, abbiamo scelto questo nome perché rappresenta la "calcolatrice" per l'Indice di Massa Corporea (IMC).
+- `(peso, altura)` rappresenta i **parametri** della funzione, cioè i valori che la funzione riceverà come input quando viene chiamata. `peso` rappresenta il peso della persona e `altura` rappresenta l'altezza.
+
+---
+
+### 3. **Calcolo dell'IMC**
+
+```python
+    imc = peso / (altura ** 2)
+```
+
+**Spiegazione:**
+- Questa riga calcola l'Indice di Massa Corporea (IMC) usando la formula:
+  \[
+  \text{IMC} = \frac{\text{peso}}{\text{altezza}^2}
+  \]
+- Qui, `peso` è diviso per `altura ** 2`, dove `altura ** 2` rappresenta `altura` elevato alla seconda potenza (cioè, altezza moltiplicata per sé stessa).
+- `=` è un operatore di assegnazione: assegna il valore calcolato sul lato destro alla variabile `imc` sul lato sinistro.
+- Dopo questa riga, `imc` contiene il valore dell'IMC.
+
+**Esempio:**
+- Se `peso = 70` e `altura = 1.75`, il calcolo sarà:
+  ```python
+  imc = 70 / (1.75 ** 2)  # 70 / 3.0625 = 22.86
+  ```
+
+---
+
+### 4. **Classificazione dell'IMC**
+
+```python
+    if imc < 18.5: cat = "Bajo Peso"
+    elif 18.5 <= imc < 25: cat = "Peso Normal"
+    elif 25 <= imc < 30: cat = "Sobrepeso"
+    else: cat = "Obesidad"
+```
+
+**Spiegazione:**
+- Questa serie di `if`, `elif`, e `else` valuta il valore di `imc` per assegnarlo a una categoria specifica.
+- `if` è un'istruzione condizionale che esegue il blocco di codice successivo solo se la condizione è vera:
+   - `if imc < 18.5`: Se `imc` è minore di 18.5, la variabile `cat` (categoria) viene impostata su `"Bajo Peso"`.
+   - `elif 18.5 <= imc < 25`: Se `imc` è tra 18.5 e 24.9 (inclusi), `cat` viene impostata su `"Peso Normal"`.
+   - `elif 25 <= imc < 30`: Se `imc` è tra 25 e 29.9, `cat` viene impostata su `"Sobrepeso"`.
+   - `else`: Se `imc` è 30 o superiore, `cat` viene impostata su `"Obesidad"`.
+
+**Esempio:**
+- Se `imc = 22.86`, soddisfa la condizione `18.5 <= imc < 25`, quindi `cat` sarà `"Peso Normal"`.
+
+---
+
+### 5. **Restituzione del Risultato**
+
+```python
+    return imc, cat
+```
+
+**Spiegazione:**
+- `return` è una parola chiave che permette alla funzione di restituire un valore (o più valori) come risultato. Quando una funzione `return` un valore, può essere usato nel resto del codice.
+- In questo caso, `return imc, cat` restituisce due valori: l'IMC calcolato e la categoria associata.
+  
+**Esempio pratico:**
+- Dopo aver eseguito `res_imc, res_cat = calc_imc(70, 1.75)`, `res_imc` conterrà il valore 22.86 e `res_cat` sarà `"Peso Normal"`.
+
+---
+
+### 6. **Messaggio di Introduzione**
+
+```python
+print("Programa para el cálculo del Índice de Masa Corporal")
+```
+
+**Spiegazione:**
+- `print()` è una funzione integrata in Python che serve per visualizzare messaggi all'utente. Il testo tra parentesi verrà mostrato nella console.
+- Questo messaggio spiega allo scopo del programma all'utente.
+
+---
+
+### 7. **Ciclo per la Richiesta del Peso**
+
+```python
+while True:
+```
+
+**Spiegazione:**
+- `while True` crea un **ciclo infinito**. Il codice che segue all'interno di questo ciclo continuerà a ripetersi finché non viene usato `break` per uscire dal ciclo.
+  
+---
+
+### 8. **Controllo del Tasto `Esc`**
+
+```python
+    if keyboard.is_pressed('esc'):
+        print("Salida del programa")
+        break
+```
+
+**Spiegazione:**
+- `if` è una condizione. Qui controlla se `keyboard.is_pressed('esc')` è `True`, ossia se l'utente ha premuto il tasto `Esc`.
+- Se `Esc` è stato premuto, viene eseguita la riga `print("Salida del programa")` per informare l'utente, e `break` termina il ciclo `while`, uscendo dal programma.
+
+---
+
+### 9. **Input del Peso**
+
+```python
+    peso = input("Ingresa el peso en 'Kg' o presiona ESC para salir").replace(",", ".")
+```
+
+**Spiegazione:**
+- `input()` consente di ottenere un dato inserito dall'utente.
+- `.replace(",", ".")` sostituisce tutte le virgole (`,`) con dei punti (`.`), in modo da poter usare il numero come decimale.
+  
+---
+
+### 10. **Conversione e Validazione del Peso**
+
+```python
+    try:
+        peso = float(peso) 
+        if 29.9 <= peso <= 250.1:
+            break  
+```
+
+**Spiegazione:**
+- `try` avvia un blocco che tenta di eseguire il codice; se si verifica un errore, gestisce l'errore nel blocco `except`.
+- `float(peso)` tenta di convertire `peso` in un numero decimale.
+- `if 29.9 <= peso <= 250.1` verifica se `peso` è nel range tra 30 e 250 kg. Se è così, `break` termina il ciclo.
+
+---
+
+### 11. **Gestione degli Errori (Eccezione)**
+
+```python
+    except ValueError:        
+        if not keyboard.is_pressed('esc'):
+            print(f"El valor ingresado no es válido: {peso}\nIngresa otra vez el peso")
+```
+
+**Spiegazione:**
+- `except ValueError` gestisce gli errori che si verificano se l'input non è un numero valido.
+- `if not keyboard.is_pressed('esc')` evita il messaggio se `Esc` è stato premuto.
+
+---
+
+### 12. **Ripetizione dei Passaggi per l'Altezza**
+
+La sezione successiva segue la stessa logica per ottenere l’altezza (`altura`) e verificarne il valore.
+
+---
+
+### 13. **Calcolo e Output dell'IMC e Categoria**
+
+```python
+if not keyboard.is_pressed('esc'):
+    res_imc, res_cat = calc_imc(peso, altura)  
+    print(f"Datos de peso y altura recibidos: {peso} Kg, {altura} m\nIMC = {res_imc:.2f}\nCategoría = {res_cat}")
+```
+
+**Spiegazione:**
+- Se `Esc` non è stato premuto, `calc_imc(peso, altura)` calcola l'IMC e restituisce `res_imc` e `res_cat`.
+- `print()` mostra peso, altezza, e IMC con due decimali (`{res_imc:.2f}`), e la categoria associata.
+
