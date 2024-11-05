@@ -1,0 +1,261 @@
+import keyboard  
+
+def comptador_paraules(texto):
+    texto = texto.lower()
+    palabras = texto.split()
+    contador = {}
+    for word in palabras:
+        if word in contador:
+            contador[word] += 1
+        else:
+            contador[word] = 1            
+    return contador
+
+print("Programa para contar las veces que aparece cada palabra o cada numero en un texto")
+
+while True:
+    if keyboard.is_pressed('esc'):
+        print("Salida del programa")
+        break
+
+    texto_in = input("Escribe el texto: \n")
+    
+    resultado = comptador_paraules(texto_in)
+
+    if not keyboard.is_pressed('esc'):
+        print("\nResultado:")
+        for palabra in sorted(resultado.keys()):  
+            print(f"'{palabra}' = {resultado[palabra]} ")
+        break
+
+
+***************************************************************************************************************************************************************************
+
+
+Ecco una spiegazione dettagliatissima di ogni riga del codice.
+
+---
+
+### 1. **Importazione della Libreria `keyboard`**
+
+```python
+import keyboard
+```
+
+**Spiegazione:**
+- `import` carica la libreria `keyboard`, che ci permette di rilevare i tasti premuti sulla tastiera.
+- Usando questa libreria, il programma può verificare se l'utente ha premuto `Esc` per uscire in qualsiasi momento.
+
+---
+
+### 2. **Definizione della Funzione `comptador_paraules`**
+
+```python
+def comptador_paraules(texto):
+```
+
+**Spiegazione:**
+- `def` introduce la definizione di una funzione in Python.
+- `comptador_paraules` è il nome della funzione, che in catalano significa “contatore di parole”.
+- `texto` è il parametro della funzione, ossia il testo che l’utente inserisce e che vogliamo analizzare.
+
+---
+
+### 3. **Conversione del Testo in Minuscolo**
+
+```python
+    texto = texto.lower()
+```
+
+**Spiegazione:**
+- `.lower()` converte ogni lettera di `texto` in minuscolo.
+- Questo permette di trattare parole con maiuscole e minuscole come identiche, evitando che "Cane" e "cane" siano considerate due parole diverse.
+
+---
+
+### 4. **Suddivisione del Testo in Parole**
+
+```python
+    palabras = texto.split()
+```
+
+**Spiegazione:**
+- `.split()` suddivide `texto` in una lista di parole, chiamata `palabras`.
+- Senza parametri, `.split()` divide il testo in base agli spazi, creando un elenco (o lista) in cui ogni elemento è una parola.
+
+---
+
+### 5. **Creazione del Dizionario `contador`**
+
+```python
+    contador = {}
+```
+
+**Spiegazione:**
+- `{}` crea un dizionario vuoto chiamato `contador`, che servirà a tenere traccia di quante volte appare ogni parola.
+- Il dizionario sarà riempito con coppie chiave-valore dove:
+  - La **chiave** è la parola.
+  - Il **valore** è il numero di volte che la parola appare nel testo.
+
+---
+
+### 6. **Conteggio delle Parole con un Ciclo `for`**
+
+```python
+    for word in palabras:
+```
+
+**Spiegazione:**
+- `for` avvia un ciclo che itera su ogni parola della lista `palabras`.
+- `word` rappresenta la parola corrente ad ogni iterazione, ossia una singola parola del testo.
+
+---
+
+#### 6.1 Controllo se la Parola è già nel Dizionario
+
+```python
+        if word in contador:
+```
+
+**Spiegazione:**
+- `if word in contador` verifica se `word` è già presente come chiave nel dizionario `contador`.
+- Questo aiuta a capire se la parola è stata già contata.
+
+---
+
+#### 6.2 Incremento del Conteggio se la Parola è già Presente
+
+```python
+            contador[word] += 1
+```
+
+**Spiegazione:**
+- `contador[word] += 1` incrementa il conteggio di `word` di 1 se la parola è già nel dizionario.
+- Aumentando il valore associato alla chiave `word`, aggiorniamo il numero di volte in cui la parola è stata trovata.
+
+---
+
+#### 6.3 Aggiunta della Parola al Dizionario se Non è Presente
+
+```python
+        else:
+            contador[word] = 1
+```
+
+**Spiegazione:**
+- `else` indica che `word` non è presente in `contador`.
+- `contador[word] = 1` aggiunge `word` come nuova chiave nel dizionario e le assegna il valore `1`, indicando che è stata trovata per la prima volta.
+
+---
+
+### 7. **Restituzione del Dizionario `contador`**
+
+```python
+    return contador
+```
+
+**Spiegazione:**
+- `return contador` restituisce il dizionario `contador`, che ora contiene ogni parola e il rispettivo conteggio.
+- Questo rende `contador` disponibile per l'uso al di fuori della funzione `comptador_paraules`.
+
+---
+
+### 8. **Messaggio Introduttivo**
+
+```python
+print("Programa para contar las veces que aparece cada palabra o cada numero en un texto")
+```
+
+**Spiegazione:**
+- `print()` visualizza un messaggio che descrive il programma: conta le occorrenze di ogni parola o numero in un testo.
+
+---
+
+### 9. **Ciclo Infinito `while`**
+
+```python
+while True:
+```
+
+**Spiegazione:**
+- `while True` crea un ciclo infinito, che continua finché non si usa `break` per interromperlo.
+- Questo permette all’utente di inserire testo più volte o di uscire premendo `Esc`.
+
+---
+
+### 10. **Controllo del Tasto `Esc` per Uscire**
+
+```python
+    if keyboard.is_pressed('esc'):
+        print("Salida del programa")
+        break
+```
+
+**Spiegazione:**
+- `keyboard.is_pressed('esc')` verifica se l’utente ha premuto `Esc`.
+- Se sì, `print("Salida del programa")` mostra un messaggio di uscita, e `break` termina il ciclo `while`, chiudendo il programma.
+
+---
+
+### 11. **Richiesta di Input all'Utente**
+
+```python
+    texto_in = input("Escribe el texto: \n")
+```
+
+**Spiegazione:**
+- `input()` mostra un messaggio e permette all’utente di inserire del testo.
+- Il testo inserito viene memorizzato nella variabile `texto_in`.
+
+---
+
+### 12. **Chiamata alla Funzione `comptador_paraules`**
+
+```python
+    resultado = comptador_paraules(texto_in)
+```
+
+**Spiegazione:**
+- `comptador_paraules(texto_in)` chiama la funzione di conteggio, passando `texto_in` come argomento.
+- Il risultato, cioè il dizionario con le parole e i loro conteggi, viene salvato in `resultado`.
+
+---
+
+### 13. **Verifica di Nuova Pressione del Tasto `Esc`**
+
+```python
+    if not keyboard.is_pressed('esc'):
+```
+
+**Spiegazione:**
+- `if not keyboard.is_pressed('esc')` controlla nuovamente se `Esc` non è premuto, assicurando che il programma mostri i risultati solo se l’utente non ha scelto di uscire.
+
+---
+
+### 14. **Stampa dei Risultati**
+
+```python
+        print("\nResultado:")
+        for palabra in sorted(resultado.keys()):  
+            print(f"'{palabra}' = {resultado[palabra]} ")
+```
+
+**Spiegazione:**
+- `print("\nResultado:")` visualizza un’intestazione per la sezione dei risultati.
+- `for palabra in sorted(resultado.keys()):`:
+  - `sorted(resultado.keys())` ordina alfabeticamente le parole (chiavi del dizionario) per una visualizzazione ordinata.
+  - `for` scorre ogni parola nell’elenco ordinato delle chiavi.
+- `print(f"'{palabra}' = {resultado[palabra]} ")`:
+  - Usa `f-string` per formattare l’output, mostrando la parola (`palabra`) e il conteggio (`resultado[palabra]`).
+  - Stampa ogni parola e il suo conteggio in una nuova riga.
+
+---
+
+### 15. **Interruzione del Ciclo dopo la Stampa dei Risultati**
+
+```python
+        break
+```
+
+**Spiegazione:**
+- `break` interrompe il ciclo `while`, terminando il programma una volta visualizzati i risultati
